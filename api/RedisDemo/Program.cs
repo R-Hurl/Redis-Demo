@@ -16,7 +16,7 @@ builder.Services.AddDbContext<DbContext>(options =>
 // Redis
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379";
+    options.Configuration = "redis:6379";
 });
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();

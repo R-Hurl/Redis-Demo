@@ -11,11 +11,13 @@ namespace RedisDemo.Repositories
     {
         private readonly DbContext _dbContext;
         private readonly IDistributedCache _cache;
+        private readonly ILogger<ProductRepository> _logger;
 
-        public ProductRepository(DbContext dbContext, IDistributedCache cache)
+        public ProductRepository(DbContext dbContext, IDistributedCache cache, ILogger<ProductRepository> logger)
         {
             _dbContext = dbContext;
             _cache = cache;
+            _logger = logger;
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
@@ -33,6 +35,7 @@ namespace RedisDemo.Repositories
             {
                 string serializedProducts = Encoding.UTF8.GetString(encodedProducts);
                 products = JsonSerializer.Deserialize<List<Product>>(serializedProducts);
+                _logger.LogInformation("Retreived products from the Redis Cache.");
             }
             else
             {
@@ -44,6 +47,7 @@ namespace RedisDemo.Repositories
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
 
                 await _cache.SetAsync(cacheKey, encodedProducts, cacheOptions);
+                _logger.LogInformation("Retreived products from the database.");
             }
 
             return products;

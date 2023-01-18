@@ -11,11 +11,13 @@ public class CategoryRepository : ICategoryRepository
 {
     private readonly DbContext _dbContext;
     private readonly IDistributedCache _cache;
+    private readonly ILogger<CategoryRepository> _logger;
 
-    public CategoryRepository(DbContext dbContext, IDistributedCache cache)
+    public CategoryRepository(DbContext dbContext, IDistributedCache cache, ILogger<CategoryRepository> logger)
     {
         _dbContext = dbContext;
         _cache = cache;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<Category>> GetCategoriesAsync()
@@ -28,6 +30,7 @@ public class CategoryRepository : ICategoryRepository
         {
             string serializedCategories = Encoding.UTF8.GetString(encodedCategories);
             categories = JsonSerializer.Deserialize<List<Category>>(serializedCategories);
+            _logger.LogInformation("Retreived categories from the Redis Cache.");
         }
         else
         {
@@ -39,6 +42,8 @@ public class CategoryRepository : ICategoryRepository
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
 
             await _cache.SetAsync(cacheKey, encodedCategories, cacheOptions);
+
+            _logger.LogInformation("Retrieved categories from the database.");
         }
 
         return categories;
