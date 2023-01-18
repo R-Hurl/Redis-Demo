@@ -1,0 +1,28 @@
+version: "3.4"
+services:
+  redis:
+    image: redis:bullseye
+    ports: 
+      - "6379:6379"
+  postgres_db:
+    image: postgres:bullseye
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "testuser"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "grocerydeliveryservicedb"
+    volumes:
+      - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
+  api:
+    image: grocerydeliveryapi:latest
+    ports:
+      - "5000:80"
+    depends_on:
+      - "postgres_db"
+    build:
+      context: api
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
