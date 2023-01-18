@@ -16,9 +16,9 @@ services:
     volumes:
       - ./seed.sql:/docker-entrypoint-initdb.d/seed.sql
   api:
-    image: grocerydeliveryapi:latest
+    image: redis-demo-api:latest
     ports:
-      - "5000:80"
+      - "5050:80"
     depends_on:
       - "postgres_db"
     build:
