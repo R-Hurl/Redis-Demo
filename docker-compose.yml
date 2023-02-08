@@ -1,9 +1,20 @@
 version: "3.4"
 services:
-  redis:
+  redis-master:
     image: redis:bullseye
-    ports: 
+    command: redis-server --appendonly yes
+    ports:
       - "6379:6379"
+  redis-slave-1:
+    image: redis:bullseye
+    command: redis-server --slaveof redis-master 6379
+    ports:
+      - "6380:6379"
+  redis-slave-2:
+    image: redis:bullseye
+    command: redis-server --slaveof redis-master 6379
+    ports:
+      - "6381:6379"
   postgres_db:
     image: postgres:bullseye
     restart: always
