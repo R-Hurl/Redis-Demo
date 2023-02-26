@@ -7,7 +7,7 @@ using RedisDemo.Repositories.Interfaces;
 
 namespace RedisDemo.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : IProductsRepository
     {
         private readonly DbContext _dbContext;
         private readonly IDistributedCache _cache;

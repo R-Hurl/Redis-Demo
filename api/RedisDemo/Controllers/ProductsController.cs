@@ -7,9 +7,9 @@ namespace RedisDemo.Controllers
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsRepository _productRepository;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(IProductsRepository productRepository)
         {
             _productRepository = productRepository;
         }

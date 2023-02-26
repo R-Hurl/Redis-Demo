@@ -19,7 +19,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = "redis-master:6379";
 });
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductsRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddControllers();
