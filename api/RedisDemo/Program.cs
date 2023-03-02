@@ -16,7 +16,7 @@ builder.Services.AddDbContext<DbContext>(options =>
 // Redis
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "redis-master:6379";
+    options.Configuration = "redis-master:6379, redis-slave:6380";
 });
 
 builder.Services.AddScoped<IProductsRepository, ProductRepository>();
